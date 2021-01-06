@@ -1,0 +1,8 @@
+{
+    "totalLeadTime": 72,
+    "changeSize": 500,
+    "timeToRequest": 12,
+    "timeToResponse": 12,
+    "timeToApproval": 24,
+    "timeToMerge": 6
+}
