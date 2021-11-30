@@ -17,11 +17,13 @@ Future<void> main() async {
   final repo = envVars['TARGET_REPOSITORY'];
   final client = GitHubClient(token, org, repo);
 
-  final targetMonthSpan = 6;
+  final backMonth = int.parse(envVars['BACK_MONTH'] ?? 0);
+  final targetMonthSpan = int.parse(envVars['MONTH_SPAN'] ?? 6);
   final now = DateTime.now();
-  final currentMonth = now.startOfMonth;
-  final targetMonthes = List.generate(targetMonthSpan, (i) => currentMonth.subMonths(i)).reversed;
-  final limitDate = targetMonthes.first;
+  final backDate = DateTime(now.year, now.month - backMonth, now.day);
+  final startOfEndMonth = backDate.startOfMonth;
+  final targetMonths = List.generate(targetMonthSpan, (i) => startOfEndMonth.subMonths(i)).reversed;
+  final limitDate = targetMonths.first;
 
   print('from: ${limitDate.format("yyyy-MM")}, to: ${now.format("yyyy-MM")}');
 
@@ -36,11 +38,11 @@ Future<void> main() async {
     final reviews = responses[2] as PullRequestReviewsResponse;
     return PullRequest.from(pr, detail, commits, reviews);
   }).toList();
-  final formattedTargetMonths = targetMonthes.map((m) => m.format('yyyy-MM')).toList();
+  final formattedTargetMonths = targetMonths.map((m) => m.format('yyyy-MM')).toList();
   final metrics = Metrics(targetMonths: formattedTargetMonths, pullRequests: prs);
 
   final encoder = JsonEncoder.withIndent('  ');
-  final outJson = File('./web/src/data/out.json');
+  final outJson = File('./web/public/out.json');
   await outJson.writeAsStringSync(encoder.convert(metrics), flush: true);
   print('wrote: ${outJson.path}');
 }

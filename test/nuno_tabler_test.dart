@@ -1,14 +1,17 @@
-import 'package:nuno/pull_request.dart';
+import 'dart:math';
+
 import 'package:test/test.dart';
 
 import 'dart:convert' show json;
 
 import 'package:collection/collection.dart' as collection;
 import 'package:intl/intl.dart';
+import 'package:nuno/pull_request.dart';
+
+import '../bin/nuno_tabler.dart';
 
 void main() {
-  test('sandbox', () {
-    const jsonString = '''{"pullRequests": [
+  const jsonString = '''{"pullRequests": [
     {
       "title": "SBPRF-12426 Fix the action config and suppress rebase automation",
       "url": "https://github.com/bizreach-inc/hrmony-prf/pull/5107",
@@ -42,6 +45,7 @@ void main() {
       "changeType": "fix"
     }]}''';
 
+  test('a Dart newbie sandbox', () {
     final jsonRaw = json.decode(jsonString);
 
     //test
@@ -60,8 +64,33 @@ void main() {
     final countsByMonth = collection.groupBy(mergedDates, (p0) => p0)
         .map((key, value) => MapEntry(key, value.length));
 
-    print('PR count by month: ${countsByMonth}');
+    // print('PR count by month: ${countsByMonth}');
 
   });
 
+  group('extractPrList', (){
+    test('should extract', (){
+      final jsonRaw = json.decode(jsonString);
+      final prList = NunoTabler.extractPrList(jsonRaw);
+
+      expect(prList.length, 2);
+    });
+  });
+
+  group('transformPrList', (){
+    test('should transform', (){
+      final jsonRaw = json.decode(jsonString);
+      final prList = NunoTabler.extractPrList(jsonRaw);
+      final table = NunoTabler.transformPrList(prList);
+
+      expect(table.length, 3);
+      expect(table[0].length, 18);
+      expect(table[1].length, 18);
+      expect(table[2].length, 18);
+
+      expect(table[0][0], 'pr_number');
+      expect(table[1][0], 5107);
+      expect(table[2][0], 5102);
+    });
+  });
 }

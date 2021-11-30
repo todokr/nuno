@@ -23,7 +23,9 @@ abstract class PullRequest with _$PullRequest {
       int changeFiles,
       String state,
       String moduleName,
-      String changeType}) = _PullRequest;
+      String changeType,
+      List<String> labels,
+      String baseBranch}) = _PullRequest;
 
   factory PullRequest.from(PullRequestResponse pr, PullRequestDetailResponse detail,
       PullRequestCommitsResponse commits, PullRequestReviewsResponse reviews) {
