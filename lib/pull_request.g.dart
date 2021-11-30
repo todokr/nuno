@@ -32,6 +32,8 @@ _$_PullRequest _$_$_PullRequestFromJson(Map<String, dynamic> json) {
     state: json['state'] as String,
     moduleName: json['moduleName'] as String,
     changeType: json['changeType'] as String,
+    labels: (json['labels'] as List)?.map((e) => e as String)?.toList(),
+    baseBranch: json['baseBranch'] as String,
   );
 }
 
@@ -51,4 +53,6 @@ Map<String, dynamic> _$_$_PullRequestToJson(_$_PullRequest instance) =>
       'state': instance.state,
       'moduleName': instance.moduleName,
       'changeType': instance.changeType,
+      'labels': instance.labels,
+      'baseBranch': instance.baseBranch,
     };

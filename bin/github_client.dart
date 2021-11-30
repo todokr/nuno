@@ -1,13 +1,14 @@
 import 'dart:convert' show json;
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+
 import 'package:nuno/pull_reqeust_commits_response.dart';
 import 'package:nuno/pull_request_detail_response.dart';
 import 'package:nuno/pull_request_response.dart';
 import 'package:nuno/pull_request_reviews_response.dart';
 
-typedef ResProcessor<T> = _ParsedResult<T> Function(
-    http.Response res, DateTime limit_date);
+typedef ResProcessor<T> = _ParsedResult<T> Function(http.Response res);
 
 class GitHubClient {
   final String _token;
@@ -18,11 +19,11 @@ class GitHubClient {
 
   GitHubClient(this._token, this._org, this._repo);
 
-  Stream<PullRequestResponse> listPullRequests(DateTime limitDate) {
+  Stream<PullRequestResponse> listPullRequests(DateTime startDate) {
     final startUrl =
         'https://api.github.com/repos/${_org}/${_repo}/pulls?per_page=100&state=close&sort=created&direction=desc';
     return _list<PullRequestResponse>(
-        startUrl, limitDate, _pullRequestProcessor);
+        startUrl, _PullRequestProcessor(startDate).create());
   }
 
   Future<PullRequestDetailResponse> fetchPullRequest(int number) async {
@@ -67,10 +68,12 @@ class GitHubClient {
         pullRequestAuthorId: authorId, reviews: reviews);
   }
 
-  Stream<T> _list<T>(String url, DateTime limitDate, ResProcessor<T> f) async* {
+  Stream<T> _list<T>(String url, ResProcessor<T> f) async* {
     print('precessing: ${url}');
+
+    //TODO HTTPステータスのチェック
     final res = await http.get(url, headers: header);
-    final result = f(res, limitDate);
+    final result = f(res);
 
     for (var v in result.values) {
       yield v;
@@ -79,7 +82,7 @@ class GitHubClient {
     final link = _parseLinkHeader(res.headers['link']);
     final nextUrl = link != null ? link['next'] : null;
     if (nextUrl != null && result.hasNext) {
-      yield* _list(nextUrl, limitDate, f);
+      yield* _list(nextUrl, f);
     }
   }
 
@@ -100,20 +103,29 @@ class GitHubClient {
     return out;
   }
 
-  _ParsedResult<PullRequestResponse> _pullRequestProcessor(
-      http.Response res, DateTime limitDate) {
-    var hasNext = false;
-    final List<dynamic> jsonBody = json.decode(res.body);
-    final prs = jsonBody
-        .map((pr) {
-          pr = pr as Map<String, dynamic>;
-          return PullRequestResponse.parse(pr);
-        })
-        .where((pr) => pr.createdAt.isAfter(limitDate))
-        .toList();
 
-    hasNext = prs.isNotEmpty;
-    return _ParsedResult(prs, hasNext);
+}
+
+class _PullRequestProcessor {
+  final DateTime startDate;
+
+  _PullRequestProcessor(this.startDate);
+
+  _ParsedResult<PullRequestResponse> Function(http.Response res) create() {
+    return (http.Response res) {
+      var hasNext = false;
+      final List<dynamic> jsonBody = json.decode(res.body);
+      final prs = jsonBody
+          .map((pr) {
+        pr = pr as Map<String, dynamic>;
+        return PullRequestResponse.parse(pr);
+      })
+          .where((pr) => pr.createdAt.isAfter(startDate))
+          .toList();
+
+      hasNext = prs.isNotEmpty;
+      return _ParsedResult(prs, hasNext);
+    };
   }
 }
 

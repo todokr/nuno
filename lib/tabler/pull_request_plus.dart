@@ -12,8 +12,8 @@ class PullRequestPlus {
   int get mergeYear => pr.mergedAt?.year;
   int get mergeMonth => pr.mergedAt?.month;
   int get mergeWeek => weekNumberOf(pr.mergedAt);
-  String get team => pr.moduleName; // TODO 精査
-  String get changeType => pr.changeType; // TODO 精査
+  String get team => pr.moduleName;
+  String get changeType => pr.changeType;
   int get duration => calcDuration(pr.oldestCommitDate, pr.mergedAt);
   DateTime get oldestCommitDate => pr.oldestCommitDate;
   DateTime get createdAt => pr.createdAt;
@@ -25,6 +25,9 @@ class PullRequestPlus {
   int get deletions => pr.deletions;
   int get changeFiles => pr.changeFiles;
   String get title => pr.title;
+  String get labels => pr.labels?.join(',');
+  bool get isProductDev => !(pr.labels ?? []).contains('xem');
+  bool get isMainPr => pr.baseBranch == 'develop';
 
 
   /// 出力用のフォーマット
@@ -47,7 +50,10 @@ class PullRequestPlus {
     additions,
     deletions,
     changeFiles,
-    title
+    title,
+    labels,
+    isProductDev,
+    isMainPr,
   ];
 
 
@@ -109,6 +115,9 @@ class PullRequestPlus {
     'additions',
     'deletions',
     'changed_files',
-    'title'
+    'title',
+    'labels',
+    'is_product_dev',
+    'is_main_pr',
   ];
 }

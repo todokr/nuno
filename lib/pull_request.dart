@@ -44,10 +44,14 @@ abstract class PullRequest with _$PullRequest {
         mergedAt: pr.mergedAt,
         commits: detail.commits,
         additions: detail.additions,
+        deletions: detail.deletions,
         changeFiles: detail.changeFiles,
         state: pr.state,
         moduleName: parsedTitle['module'],
-        changeType: parsedTitle['type']);
+        changeType: parsedTitle['type'],
+        labels: pr.labels,
+        baseBranch: pr.baseBranch,
+    );
   }
 
   factory PullRequest.fromJson(Map<String, dynamic> json) =>

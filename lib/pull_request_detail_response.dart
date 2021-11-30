@@ -11,7 +11,7 @@ class PullRequestDetailResponse {
       commits: githubResponse['commits'],
       additions: githubResponse['additions'] ?? 0,
       deletions: githubResponse['deletions'] ?? 0,
-      changeFiles: githubResponse['changeFiles'],
+      changeFiles: githubResponse['changed_files'] ?? 0,
     );
   }
 }

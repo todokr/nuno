@@ -84,9 +84,9 @@ void main() {
       final table = NunoTabler.transformPrList(prList);
 
       expect(table.length, 3);
-      expect(table[0].length, 18);
-      expect(table[1].length, 18);
-      expect(table[2].length, 18);
+      expect(table[0].length, 21);
+      expect(table[1].length, 21);
+      expect(table[2].length, 21);
 
       expect(table[0][0], 'pr_number');
       expect(table[1][0], 5107);

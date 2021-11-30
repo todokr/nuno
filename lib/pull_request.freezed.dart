@@ -31,7 +31,9 @@ class _$PullRequestTearOff {
       int changeFiles,
       String state,
       String moduleName,
-      String changeType}) {
+      String changeType,
+      List<String> labels,
+      String baseBranch}) {
     return _PullRequest(
       title: title,
       url: url,
@@ -47,6 +49,8 @@ class _$PullRequestTearOff {
       state: state,
       moduleName: moduleName,
       changeType: changeType,
+      labels: labels,
+      baseBranch: baseBranch,
     );
   }
 
@@ -76,6 +80,8 @@ mixin _$PullRequest {
   String get state;
   String get moduleName;
   String get changeType;
+  List<String> get labels;
+  String get baseBranch;
 
   Map<String, dynamic> toJson();
   $PullRequestCopyWith<PullRequest> get copyWith;
@@ -100,7 +106,9 @@ abstract class $PullRequestCopyWith<$Res> {
       int changeFiles,
       String state,
       String moduleName,
-      String changeType});
+      String changeType,
+      List<String> labels,
+      String baseBranch});
 }
 
 /// @nodoc
@@ -127,6 +135,8 @@ class _$PullRequestCopyWithImpl<$Res> implements $PullRequestCopyWith<$Res> {
     Object state = freezed,
     Object moduleName = freezed,
     Object changeType = freezed,
+    Object labels = freezed,
+    Object baseBranch = freezed,
   }) {
     return _then(_value.copyWith(
       title: title == freezed ? _value.title : title as String,
@@ -153,6 +163,9 @@ class _$PullRequestCopyWithImpl<$Res> implements $PullRequestCopyWith<$Res> {
           moduleName == freezed ? _value.moduleName : moduleName as String,
       changeType:
           changeType == freezed ? _value.changeType : changeType as String,
+      labels: labels == freezed ? _value.labels : labels as List<String>,
+      baseBranch:
+          baseBranch == freezed ? _value.baseBranch : baseBranch as String,
     ));
   }
 }
@@ -178,7 +191,9 @@ abstract class _$PullRequestCopyWith<$Res>
       int changeFiles,
       String state,
       String moduleName,
-      String changeType});
+      String changeType,
+      List<String> labels,
+      String baseBranch});
 }
 
 /// @nodoc
@@ -207,6 +222,8 @@ class __$PullRequestCopyWithImpl<$Res> extends _$PullRequestCopyWithImpl<$Res>
     Object state = freezed,
     Object moduleName = freezed,
     Object changeType = freezed,
+    Object labels = freezed,
+    Object baseBranch = freezed,
   }) {
     return _then(_PullRequest(
       title: title == freezed ? _value.title : title as String,
@@ -233,6 +250,9 @@ class __$PullRequestCopyWithImpl<$Res> extends _$PullRequestCopyWithImpl<$Res>
           moduleName == freezed ? _value.moduleName : moduleName as String,
       changeType:
           changeType == freezed ? _value.changeType : changeType as String,
+      labels: labels == freezed ? _value.labels : labels as List<String>,
+      baseBranch:
+          baseBranch == freezed ? _value.baseBranch : baseBranch as String,
     ));
   }
 }
@@ -255,7 +275,9 @@ class _$_PullRequest implements _PullRequest {
       this.changeFiles,
       this.state,
       this.moduleName,
-      this.changeType});
+      this.changeType,
+      this.labels,
+      this.baseBranch});
 
   factory _$_PullRequest.fromJson(Map<String, dynamic> json) =>
       _$_$_PullRequestFromJson(json);
@@ -288,10 +310,14 @@ class _$_PullRequest implements _PullRequest {
   final String moduleName;
   @override
   final String changeType;
+  @override
+  final List<String> labels;
+  @override
+  final String baseBranch;
 
   @override
   String toString() {
-    return 'PullRequest(title: $title, url: $url, oldestCommitDate: $oldestCommitDate, createdAt: $createdAt, oldestReactionDate: $oldestReactionDate, latestApprovalDate: $latestApprovalDate, mergedAt: $mergedAt, commits: $commits, additions: $additions, deletions: $deletions, changeFiles: $changeFiles, state: $state, moduleName: $moduleName, changeType: $changeType)';
+    return 'PullRequest(title: $title, url: $url, oldestCommitDate: $oldestCommitDate, createdAt: $createdAt, oldestReactionDate: $oldestReactionDate, latestApprovalDate: $latestApprovalDate, mergedAt: $mergedAt, commits: $commits, additions: $additions, deletions: $deletions, changeFiles: $changeFiles, state: $state, moduleName: $moduleName, changeType: $changeType, labels: $labels, baseBranch: $baseBranch)';
   }
 
   @override
@@ -336,7 +362,12 @@ class _$_PullRequest implements _PullRequest {
                     .equals(other.moduleName, moduleName)) &&
             (identical(other.changeType, changeType) ||
                 const DeepCollectionEquality()
-                    .equals(other.changeType, changeType)));
+                    .equals(other.changeType, changeType)) &&
+            (identical(other.labels, labels) ||
+                const DeepCollectionEquality().equals(other.labels, labels)) &&
+            (identical(other.baseBranch, baseBranch) ||
+                const DeepCollectionEquality()
+                    .equals(other.baseBranch, baseBranch)));
   }
 
   @override
@@ -355,7 +386,9 @@ class _$_PullRequest implements _PullRequest {
       const DeepCollectionEquality().hash(changeFiles) ^
       const DeepCollectionEquality().hash(state) ^
       const DeepCollectionEquality().hash(moduleName) ^
-      const DeepCollectionEquality().hash(changeType);
+      const DeepCollectionEquality().hash(changeType) ^
+      const DeepCollectionEquality().hash(labels) ^
+      const DeepCollectionEquality().hash(baseBranch);
 
   @override
   _$PullRequestCopyWith<_PullRequest> get copyWith =>
@@ -382,7 +415,9 @@ abstract class _PullRequest implements PullRequest {
       int changeFiles,
       String state,
       String moduleName,
-      String changeType}) = _$_PullRequest;
+      String changeType,
+      List<String> labels,
+      String baseBranch}) = _$_PullRequest;
 
   factory _PullRequest.fromJson(Map<String, dynamic> json) =
       _$_PullRequest.fromJson;
@@ -415,6 +450,10 @@ abstract class _PullRequest implements PullRequest {
   String get moduleName;
   @override
   String get changeType;
+  @override
+  List<String> get labels;
+  @override
+  String get baseBranch;
   @override
   _$PullRequestCopyWith<_PullRequest> get copyWith;
 }
