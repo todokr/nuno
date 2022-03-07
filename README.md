@@ -9,6 +9,7 @@ Created from templates made available by Stagehand under a BSD-style
 
 ```shell
 # brew でインストール。freezedとの関係で少し前のバージョンを実行
+brew tap dart-lang/dart
 brew install dart@2.12
 
 # お決まりの

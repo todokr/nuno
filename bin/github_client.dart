@@ -114,6 +114,7 @@ class _PullRequestProcessor {
   _ParsedResult<PullRequestResponse> Function(http.Response res) create() {
     return (http.Response res) {
       var hasNext = false;
+      // 認証がうまく言っていないと次の行でキャストできずにエラー
       final List<dynamic> jsonBody = json.decode(res.body);
       final prs = jsonBody
           .map((pr) {
