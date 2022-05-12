@@ -17,7 +17,7 @@ class PullRequestReviewsResponse {
     if (reviewsExcludeAuthor.isEmpty) {
       return null;
     } else {
-      return reviewsExcludeAuthor.reduce((a, b) => a.date.isBefore(b.date) ? a : b);
+      return reviewsExcludeAuthor.reduce((a, b) => a.date != null && a.date.isBefore(b.date) ? a : b);
     }
   }
 
@@ -27,7 +27,7 @@ class PullRequestReviewsResponse {
     if (reviewsExcludeAuthor.isEmpty) {
       return null;
     } else {
-      return reviewsExcludeAuthor.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+      return reviewsExcludeAuthor.reduce((a, b) => a.date != null && a.date.isAfter(b.date) ? a : b);
     }
   }
 }
