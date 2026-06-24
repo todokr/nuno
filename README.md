@@ -1,6 +1,6 @@
 # nuno
 
-> Not only does it help you have great timing, but it helps you understand how a band works.
+> Not only does it help you have great timing, but it helps you understand how a band works.  
 > -- Nuno Bettencourt
 
 
