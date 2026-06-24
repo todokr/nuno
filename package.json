@@ -1,0 +1,24 @@
+{
+  "name": "nuno",
+  "version": "1.0.0",
+  "description": "A command-line application that collects GitHub pull request metrics.",
+  "type": "module",
+  "bin": {
+    "nuno": "./dist/index.js"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --import tsx \"test/**/*.test.ts\"",
+    "nuno": "node dist/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}

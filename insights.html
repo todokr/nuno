@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>開発速度インサイト（AI駆動開発の観点）</title>
+<style>
+  :root {
+    --bg: #eeeae4;
+    --fg: #444;
+    --primary: #354e59;
+    --accent: #c0542d;
+    --card: #fff;
+    --muted: #7a7269;
+    --line: #ddd6cc;
+    --good: #2f8a5b;
+    --warn: #b8860b;
+    --bad: #c0542d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.7;
+  }
+  header {
+    background: var(--primary);
+    color: #fff;
+    padding: 32px 24px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 24px; }
+  header p { margin: 0; opacity: 0.85; font-size: 14px; }
+  main { max-width: 960px; margin: 0 auto; padding: 24px 20px 64px; }
+  section { background: var(--card); border-radius: 8px; padding: 24px 28px; margin: 20px 0; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  h2 { color: var(--primary); font-size: 20px; margin: 0 0 4px; border-bottom: 2px solid var(--line); padding-bottom: 10px; }
+  h2 .num { display: inline-block; background: var(--primary); color: #fff; border-radius: 50%; width: 28px; height: 28px; line-height: 28px; text-align: center; font-size: 15px; margin-right: 10px; }
+  h3 { font-size: 16px; margin: 22px 0 6px; }
+  p.lead { color: var(--muted); margin-top: 6px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-top: 8px; }
+  .card { background: var(--bg); border-radius: 8px; padding: 16px; border-left: 4px solid var(--primary); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 26px; font-weight: 700; color: var(--primary); }
+  .card .sub { font-size: 12px; color: var(--muted); }
+  .card.highlight { border-left-color: var(--accent); }
+  .card.highlight .value { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th, td { padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { background: var(--primary); color: #fff; font-weight: 600; }
+  tbody tr:nth-child(even) { background: #faf8f5; }
+  .bad { color: var(--bad); font-weight: 700; }
+  .good { color: var(--good); font-weight: 700; }
+  .warn { color: var(--warn); font-weight: 700; }
+  .callout { background: #fbf2ee; border-left: 4px solid var(--accent); border-radius: 6px; padding: 14px 18px; margin: 14px 0; }
+  .callout strong { color: var(--accent); }
+  ol.actions { list-style: none; counter-reset: a; padding: 0; }
+  ol.actions > li { counter-increment: a; background: var(--bg); border-radius: 8px; padding: 14px 16px 14px 56px; position: relative; margin: 10px 0; }
+  ol.actions > li::before { content: counter(a, upper-latin); position: absolute; left: 14px; top: 14px; width: 30px; height: 30px; line-height: 30px; text-align: center; background: var(--primary); color: #fff; border-radius: 6px; font-weight: 700; }
+  ol.actions > li.prio::before { background: var(--accent); }
+  ol.actions h4 { margin: 0 0 4px; font-size: 15px; }
+  ol.actions ul { margin: 6px 0 0; padding-left: 18px; font-size: 14px; color: #555; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--accent); color: #fff; margin-left: 8px; vertical-align: middle; }
+  .note { font-size: 13px; color: var(--muted); }
+  .note li { margin: 6px 0; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 20px 40px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>開発速度インサイト</h1>
+  <p>AI 駆動開発の観点での施策検討 ／ 対象: マージ済み 352 PR（2026-02〜06）</p>
+</header>
+
+<main>
+  <section>
+    <h2>概要</h2>
+    <p class="lead">PR メトリクス（リードタイム・レビュー往復・issue 起点リードタイム）の中央値ベースの要約。</p>
+    <div class="cards">
+      <div class="card highlight">
+        <div class="label">issue → 着手</div>
+        <div class="value">≈14日</div>
+        <div class="sub">中央 340h（全体の約70%）</div>
+      </div>
+      <div class="card highlight">
+        <div class="label">issue → マージ（総リードタイム）</div>
+        <div class="value">≈20日</div>
+        <div class="sub">中央 487h</div>
+      </div>
+      <div class="card">
+        <div class="label">commit → approval</div>
+        <div class="value">22h</div>
+        <div class="sub">平均 69h / p90 172h</div>
+      </div>
+      <div class="card">
+        <div class="label">一発承認率</div>
+        <div class="value">81%</div>
+        <div class="sub">reviewRounds 中央 0 回</div>
+      </div>
+      <div class="card">
+        <div class="label">変更行数</div>
+        <div class="value">205行</div>
+        <div class="sub">平均 1958 / 1000行超が28%</div>
+      </div>
+      <div class="card">
+        <div class="label">issue リンク率</div>
+        <div class="value">50%</div>
+        <div class="sub">計測母数の半分</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">1</span>最大のボトルネックは「着手までの待ち時間」</h2>
+    <p class="lead">issue 起点リードタイム 487h の内訳。</p>
+    <table>
+      <thead><tr><th>区間</th><th>中央値</th><th>割合</th></tr></thead>
+      <tbody>
+        <tr><td>issue → 着手（最初のコミット）</td><td class="bad">340h（≈14日）</td><td class="bad">約70%</td></tr>
+        <tr><td>着手 → マージ（実装＋レビュー）</td><td>147h（≈6日）</td><td>約30%</td></tr>
+        <tr><td><strong>合計（issue → マージ）</strong></td><td><strong>487h（≈20日）</strong></td><td>100%</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <strong>示唆:</strong> 一度着手すれば約6日と速い。しかし issue が積まれてから着手まで約14日滞留している。
+      <strong>AI でコード生成を速くしても、この70%は縮まらない。</strong>ボトルネックは「実装速度」から「いつ着手するか（トリアージ・優先度付け・キュー）」へ移っている。
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>レビューは既に速く回っている（往復が起きると激痛）</h2>
+    <p class="lead">一発承認率 81%、レビュー往復が発生するのは 19% の PR のみ。ただし差し戻しの代償は大きい。</p>
+    <table>
+      <thead><tr><th>reviewRounds</th><th>PR数</th><th>中央 size</th><th>中央 lead</th></tr></thead>
+      <tbody>
+        <tr><td>0 回</td><td>285</td><td>173行</td><td class="good">18h</td></tr>
+        <tr><td>1 回</td><td>48</td><td class="bad">1325行</td><td class="bad">100.5h</td></tr>
+        <tr><td>2 回</td><td>9</td><td>547行</td><td>30h</td></tr>
+        <tr><td>3 回+</td><td>10</td><td>947行</td><td class="bad">134h</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <strong>示唆:</strong> 1 回でも差し戻すとリードタイムが <strong>約5.5倍（18h→100h）</strong>。しかも差し戻される PR は中央 1325 行と大きい。「大きい PR がたまにレビュー差し戻し → 大幅遅延」という構図。
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>サイズの「崖」は 500 行に健在</h2>
+    <p class="lead">変更行数バケット別の中央値。500 行を超えるとリードタイムが跳ね、一発承認率が落ちる。</p>
+    <table>
+      <thead><tr><th>変更行数</th><th>PR数</th><th>lead</th><th>approval</th><th>一発%</th><th>issue→merge</th></tr></thead>
+      <tbody>
+        <tr><td>0–50</td><td>98</td><td class="good">1h</td><td>0h</td><td class="good">97%</td><td>165h</td></tr>
+        <tr><td>50–200</td><td>77</td><td>17h</td><td>3h</td><td>83%</td><td>236h</td></tr>
+        <tr><td>200–500</td><td>42</td><td>19h</td><td>4h</td><td>86%</td><td>344h</td></tr>
+        <tr><td>500–1000</td><td>36</td><td class="warn">48h</td><td>24h</td><td class="warn">72%</td><td>385h</td></tr>
+        <tr><td>1000+</td><td>99</td><td class="bad">113h</td><td class="bad">46h</td><td class="bad">65%</td><td class="bad">2088h</td></tr>
+      </tbody>
+    </table>
+    <p class="note">1000 行超が全体の 28%（99件）を占め、lead・一発率・滞留すべてを悪化させている。AI で大量生成すると増えやすい領域。</p>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>最強の相関は「だらだら作る」こと</h2>
+    <p class="lead">Pearson 相関係数（マージ済み PR）。</p>
+    <table>
+      <thead><tr><th>組み合わせ</th><th>r</th><th>n</th></tr></thead>
+      <tbody>
+        <tr><td>commits × totalLeadTime</td><td class="bad">0.692</td><td>344</td></tr>
+        <tr><td>reviewRounds × timeToApproval</td><td>0.425</td><td>344</td></tr>
+        <tr><td>reviewRounds × totalLeadTime</td><td>0.370</td><td>344</td></tr>
+        <tr><td>changeSize × totalLeadTime</td><td>0.293</td><td>344</td></tr>
+        <tr><td>changeSize × reviewRounds</td><td>0.070</td><td>352</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <strong>示唆:</strong> 「行数そのもの」(0.293) より <strong>コミット数 = だらだら長く作る</strong>(0.692) ことが遅延に効いている。AI で一気に作って即 PR する短命ブランチが有利。
+    </div>
+  </section>
+
+  <section>
+    <h2>AI 駆動開発での速度向上 施策</h2>
+    <p class="lead">効果が大きい順。</p>
+    <ol class="actions">
+      <li class="prio">
+        <h4>着手リードタイムの短縮<span class="tag">最優先・全体の70%</span></h4>
+        <ul>
+          <li>issue のトリアージ／優先度付け／見積りを AI で自動化し「即着手可能」を判定</li>
+          <li>バックログの WIP 制限、issue 作成 → 着手の SLA 設定</li>
+          <li>小さい issue は AI エージェントに自動着手させ、待ち時間をゼロに（ここが AI の真価）</li>
+        </ul>
+      </li>
+      <li>
+        <h4>PR サイズを崖（500行）の手前に</h4>
+        <ul>
+          <li>AI 生成でも 500 行未満を基本に。1000 行超（28%）の削減が最も効く</li>
+          <li>500 行超は「構造化 PR ＋ AI 事前レビュー必須」ゲート</li>
+        </ul>
+      </li>
+      <li>
+        <h4>レビュー往復の予防（1回 = 5.5倍の損失）</h4>
+        <ul>
+          <li>人間レビュー前に AI 自己レビュー・テスト生成・CI 通過で品質担保</li>
+          <li>特に大きい feat（一発 66%・lead 48h）に重点</li>
+        </ul>
+      </li>
+      <li>
+        <h4>短命ブランチ・小コミット</h4>
+        <ul>
+          <li>commits 相関 0.692。AI で一気に作って即 PR、stacked PR で分割</li>
+        </ul>
+      </li>
+      <li>
+        <h4>計測精度の改善（AI で自動付与）</h4>
+        <ul>
+          <li>issue リンク率 50% → AI で <code>Closes #N</code> を自動付与し母数を回復</li>
+          <li>changeType 未分類 36%（126件）→ PR タイトル規約を AI で自動付与し分類粒度を上げる</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>データ上の注意</h2>
+    <ul class="note">
+      <li><strong>issue 起点指標は「バックログ滞留」を含む</strong>：closingIssuesReferences は古い issue も拾うため p90 が 7208h（≈300日）と極端。中央値 340h でも「最近積まれて着手」と「長期塩漬けの回収」が混在する。施策 A を精緻に評価するなら「直近作成 issue」に絞った再集計を推奨。</li>
+      <li>2026-06 は集計途中の可能性（issue→merge 中央 92h と急に短い）。</li>
+      <li>issue リンク率 50% のため、issue 起点指標の母数は約 190 件（全体の半分）。</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  Generated from nuno CLI output (web/public/out.json) ／ 中央値ベース
+</footer>
+</body>
+</html>

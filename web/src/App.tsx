@@ -7,7 +7,7 @@ import {
 
 const App = () => (
     <div className="app">
-        <Heading backgroundColor="gray.700" color="white" p="14" mb="2">
+        <Heading size="3xl" backgroundColor="gray.700" color="white" p="14" mb="2">
 <Center>Development Performance Indicators</Center>
         </Heading>
         <div className='wrapper'>

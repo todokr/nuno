@@ -1,8 +1,6 @@
-@import './palette.scss';
-
 body {
   margin: 0;
-  ont-family: "Helvetica Neue",
+  font-family: "Helvetica Neue",
               Arial,
               "Hiragino Kaku Gothic ProN",
               "Hiragino Sans",
@@ -12,16 +10,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-canvas.chartjs-render-monitor {
+canvas {
     background-color: #fff;
     padding: 8px;
 }
 
 .description {
     font-size: 14px;
-}
-
-.chakra-radio__control {
-    border-color: transparent!important;
-    background: #fff;
 }

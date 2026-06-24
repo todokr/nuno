@@ -1,5 +1,7 @@
 {
-    "totalLeadTime": 72,
+    "totalLeadTime": 48,
+    "issueToMerge": 168,
+    "issueToFirstCommit": 48,
     "changeSize": 500,
     "timeToRequest": 12,
     "timeToResponse": 12,
